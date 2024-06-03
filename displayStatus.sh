@@ -6,15 +6,19 @@ if [[ $user == "Core" ]]; then
 else 
     echo "Permission not granted"
 fi 
-
+#Declaring arrays to keep count of domain and task submissions"
 declare -a taskcounter
 declare -a taskcompleted
+# This makes the lastchecktime set to 0 at start and later on gets changed if any new  , any errors will be sent to /dev/null
 lastchecktime=$(cat "/home/Core/lastchecktime.txt" 2>/dev/null || echo 0)
 latestsubmission=''
+#getting current time and updating lastchecktime.txt 
 currenttime=$(date +%s)
+echo "currenttime" > "/home/Core/lastchecktime.txt"
 
 for mentee in "/home/Core/mentees"/*; do
     menteeName=$(basename "$mentee")
+# getting submission details of mentee from home dir 
     while IFS= read -r line; do 
         line=$(echo "$line" | xargs)
         if  [[ "${line: -1}" == ":"]]; then 
@@ -26,7 +30,8 @@ for mentee in "/home/Core/mentees"/*; do
         status=$(echo "$status" | xargs)
         if [ -z "$domain" ] || [ -z "$task" ] || [ -z "$status" ]; then
         continue
-        fi 
+        fi
+#increasing the submitted task counter if status is y and using stat to display date of file and then checking if there is lates submission
         index="$domain $task"
         taskcounter["index"]=$((taskcounter["index"]+1))
         if [ "$status" == "y" ]; then 
@@ -37,6 +42,7 @@ for mentee in "/home/Core/mentees"/*; do
         fi 
     done <"/home/Core/mentees/$menteeName/task_submitted.txt"
 done 
+#printing total submission filtering domain and task wise 
 echo "Percentage of total submissions"
 for filter in "${!taskcounter[@]}"; do 
     domain=$(echo "filter" | cut -d '' -f1)
@@ -46,6 +52,7 @@ for filter in "${!taskcounter[@]}"; do
     percentage=$((100*submitted/total))
     echo " $domain $task : $perecentage submitted"
 done 
+#printing recent submissions 
 echo -e "\nRecent Submissions"
 echo -e "$latestsubmission"
     
