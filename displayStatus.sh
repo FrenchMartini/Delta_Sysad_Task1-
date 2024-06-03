@@ -23,6 +23,10 @@ for mentee in "/home/Core/mentees"/*; do
         if [ -z "$domain" ] || [ -z "$task" ] || [ -z "$status" ]; then
         continue
         fi 
+        index="$domain $task"
+        taskcounter["index"]=$((taskcounter["index"]+1))
+        if [ "$status" == "
+        
         
     done <"/home/Core/mentees/$mentee"
 
