@@ -1,0 +1,71 @@
+#!/bin/bash 
+
+#Creating account for Core with home directory 
+sudo useradd -m -d /home/Core Core >/dev/null
+#Creating pasword for testing the script
+echo "Core:Core" | sudo chpasswd 
+echo "Core user account and home directory created"
+#Creating mentor and mentee directories under /home/Core 
+sudo mkdir -p /home/Core/mentors 
+sudo mkdir -p /home/Core/mentees 
+echo "Mentor and Mentee directories created under /home/Core"
+#Reading names from first column and filtering first row of details using awk and tail in menteeDetails.txt 
+menteeFile=menteeDetails.txt
+awk '{print $1}' "$menteeFile" | tail -n +2 | while IFS= read -r menteeName; do
+    sudo useradd -m -d "/home/Core/mentees/$menteeName" "$menteeName"  >/dev/null
+done
+#Created the accounts and home directories for each mentee using useradd command using a whileloop 
+echo "Created accounts and home directories for each mentee"
+
+sudo mkdir -p /home/Core/mentors/webdev
+sudo mkdir -p /home/Core/mentors/appdev
+sudo mkdir -p /home/Core/mentors/sysad
+echo "Created folders Webdev,Appdev,Sysad under mentors folder"
+
+mentorFile=mentorDetails.txt
+#using input redirection, also filtering out names and domain using IFS as " " 
+#Creating mentor accounts and home directories under their respective domains
+#Also creating allocatedMentees.txt and submittedTaks directoires under each mentors home directory 
+while IFS=' ' read -r mentorName mentorDomain _; do
+    
+    echo "Prcoessing mentor $mentorName, Domain:$mentorDomain"
+
+    if [[ $mentorDomain = "sysad" ]]; then 
+        useradd -m -d "/home/Core/mentors/sysad/$mentorName" "$mentorName" 
+        touch "/home/Core/mentors/sysad/$mentorName/allocatedMentees.txt"
+        mkdir -p "/home/Core/mentors/sysad/$mentorName/submittedTasks"
+        for taskNumber in {1..3}; do 
+            mkdir -p "/home/Core/mentors/sysad/$mentorName/submittedTasks/task$taskNumber"
+        done
+        
+    elif [[ $mentorDomain = "web" ]]; then 
+        useradd -m -d "/home/Core/mentors/webdev/$mentorName" "$mentorName"
+        touch "/home/Core/mentors/webdev/$mentorName/allocatedMentees.txt"
+        mkdir -p "/home/Core/mentors/webdev/$mentorName/submittedTasks"
+        for taskNumber in {1..3}; do 
+            mkdir -p "/home/Core/mentors/webdev/$mentorName/submittedTasks/task$taskNumber"
+        done
+       
+    elif [[ $mentorDomain = "app" ]]; then
+        useradd -m -d "/home/Core/mentors/appdev/$mentorName" "$mentorName"
+        touch "/home/Core/mentors/appdev/$mentorName/allocatedMentees.txt"
+        mkdir -p "/home/Core/mentors/appdev/$mentorName/submittedTasks"
+        for taskNumber in {1..3}; do 
+            mkdir -p "/home/Core/mentors/appdev/$mentorName/submittedTasks/Task$taskNumber"
+        done
+        
+    fi 
+done < "$mentorFile"
+echo "Created accounts and home directories for mentors in their respective domains"
+
+#Creating the required files for each mentee under their home directory
+awk '{print $1}' "$menteeFile" | tail -n +2 | while IFS= read -r menteeName; do
+    touch "/home/Core/mentees/$menteeName/domain_pref.txt"
+    touch "/home/Core/mentees/$menteeName/task_completed.txt"
+    touch "/home/Core/mentees/$menteeName/task_submitted.txt"
+done 
+echo "Created required files for each mentee in their home directory"
+
+touch  "/home/Core/mentees_domain.txt"
+chmod u+x,g+x,o-rx /home/Core/mentees_domain.txt
+echo "Created mentees_domain.txt file under core with only write permissions for mentees"
