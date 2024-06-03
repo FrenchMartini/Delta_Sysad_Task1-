@@ -31,7 +31,7 @@ while IFS=' ' read -r mentorName mentorDomain _; do
     echo "Prcoessing mentor $mentorName, Domain:$mentorDomain"
 
     if [[ $mentorDomain = "sysad" ]]; then 
-        useradd -m -d "/home/Core/mentors/sysad/$mentorName" "$mentorName" 
+        sudo useradd -m -d "/home/Core/mentors/sysad/$mentorName" "$mentorName" >/dev/null
         touch "/home/Core/mentors/sysad/$mentorName/allocatedMentees.txt"
         mkdir -p "/home/Core/mentors/sysad/$mentorName/submittedTasks"
         for taskNumber in {1..3}; do 
@@ -39,7 +39,7 @@ while IFS=' ' read -r mentorName mentorDomain _; do
         done
         
     elif [[ $mentorDomain = "web" ]]; then 
-        useradd -m -d "/home/Core/mentors/webdev/$mentorName" "$mentorName"
+        sudo useradd -m -d "/home/Core/mentors/webdev/$mentorName" "$mentorName" >/dev/null
         touch "/home/Core/mentors/webdev/$mentorName/allocatedMentees.txt"
         mkdir -p "/home/Core/mentors/webdev/$mentorName/submittedTasks"
         for taskNumber in {1..3}; do 
@@ -47,7 +47,7 @@ while IFS=' ' read -r mentorName mentorDomain _; do
         done
        
     elif [[ $mentorDomain = "app" ]]; then
-        useradd -m -d "/home/Core/mentors/appdev/$mentorName" "$mentorName"
+        sudo useradd -m -d "/home/Core/mentors/appdev/$mentorName" "$mentorName" >/dev/null
         touch "/home/Core/mentors/appdev/$mentorName/allocatedMentees.txt"
         mkdir -p "/home/Core/mentors/appdev/$mentorName/submittedTasks"
         for taskNumber in {1..3}; do 
@@ -67,5 +67,36 @@ done
 echo "Created required files for each mentee in their home directory"
 
 touch  "/home/Core/mentees_domain.txt"
-chmod u+x,g+x,o-rx /home/Core/mentees_domain.txt
-echo "Created mentees_domain.txt file under core with only write permissions for mentees"
+
+#Setting permissions for core 
+sudo chown -R Core:core /home/Core
+sudo chmod 750 /home/Core
+sudo chmod 750 /home/Core/mentors
+sudo chmod 750 /home/Core/mentees
+#Setting permissions for mentor dir
+for domain in webdev appdev sysad; do
+    sudo chmod 750 "/home/Core/mentors/$domain"
+done
+#setting permission for each mentor 
+while IFS=' ' read -r mentorName mentorDomain _; do
+    mentorHome="/home/Core/mentors/${mentorDomain,,}/$mentorName"
+    sudo chmod 750 "$mentorHome"
+    sudo chown "$mentorName":"$mentorName" "$mentorHome"
+done < "$mentorFile"
+
+#Setting permission for each mentee
+awk '{print $1}' "$menteeFile" | tail -n +2 | while IFS= read -r menteeName; do
+    menteeHome="/home/Core/mentees/$menteeName"
+    sudo chmod 700 "$menteeHome"
+    sudo chown "$menteeName":"$menteeName" "$menteeHome"
+done
+# Allowing  Core to access everyone's home directory
+while IFS=' ' read -r mentorName mentorDomain _; do
+    sudo setfacl -m u:Core:rwx "/home/Core/mentors/${mentorDomain,,}/$mentorName"
+done < "$mentorFile"
+
+awk '{print $1}' "$menteeFile" | tail -n +2 | while IFS= read -r menteeName; do
+    sudo setfacl -m u:Core:rwx "/home/Core/mentees/$menteeName"
+done
+
+
