@@ -1,4 +1,3 @@
-
 #!/bin/bash 
 
 #Creating account for Core with home directory 
