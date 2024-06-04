@@ -1,7 +1,16 @@
 #!/bin/bash 
 #Reading username of mentee to check if mentee home directory exists 
-read -p "Enter menteee username:" menteeName
-read -p "Enter mentee rollno:" menteeRollno
+user=$(whoami)
+awk '{print $1}' "/home/adithya/Desktop/Delta_Sysad/menteeDetails.txt" | tail -n +2 | while IFS= read -r name; do
+    if [[ $user == "name" ]]; then 
+        echo " Welcome mentee"
+    else 
+        echo "Permission not granted"
+        exit 0 
+    fi 
+done 
+
+
 
 if [ -d "/home/Core/mentees/$menteeName" ]; then
     
@@ -20,5 +29,5 @@ if [ -d "/home/Core/mentees/$menteeName" ]; then
     [ -n "$domain2" ] && mkdir -p "/home/Core/mentees/$menteeName/$domain2"
     [ -n "$domain3" ] && mkdir -p "/home/Core/mentees/$menteeName/$domain3"
 else
-    echo "Error: Mentee's home directory does not exist."
+    exit 0
 fi
