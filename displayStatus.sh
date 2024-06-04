@@ -1,7 +1,7 @@
 #!/bin/bash 
 user=$(whoami)
 #First checking if user is Core 
-if [[ $user == "Core" ]]; then 
+if [[ "$user" == "Core" ]]; then 
     echo "User verified proceeding to show status !"
 else 
     echo "Permission not granted"
@@ -21,7 +21,7 @@ for mentee in "/home/Core/mentees"/*; do
 # getting submission details of mentee from home dir 
     while IFS= read -r line; do 
         line=$(echo "$line" | xargs)
-        if  [[ "${line: -1}" == ":"]]; then 
+        if  [[ "${line: -1}" == ":" ]]; then 
             domain="${line%:}"
             continue 
         fi 

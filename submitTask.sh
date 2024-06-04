@@ -2,7 +2,7 @@
 user=$(whoami)
 ############################MenteeScript#######################################
 awk '{print $1}' "/home/Desktop/Delta_Sysad/menteeDetails.txt" | tail -n +2 | while IFS= read -r name; do
-    if [[ $user == "name" ]]; then 
+    if [[ "$user" == "$name" ]]; then 
         echo " Welcome mentee"
     else 
         echo "Permission not granted"

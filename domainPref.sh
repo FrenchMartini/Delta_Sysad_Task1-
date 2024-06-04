@@ -1,18 +1,19 @@
 #!/bin/bash 
 #Reading username of mentee to check if mentee home directory exists 
 user=$(whoami)
-awk '{print $1}' "/home/adithya/Desktop/Delta_Sysad/menteeDetails.txt" | tail -n +2 | while IFS= read -r name; do
-    if [[ $user == "name" ]]; then 
+awk '{print $1}' "menteeDetails.txt" | tail -n +2 | while IFS= read -r name; do
+    if [[ "$user" == "$name" ]]; then 
         echo " Welcome mentee"
+        break
     else 
-        echo "Permission not granted"
+        echo "Permission isnt granted"
         exit 0 
     fi 
 done 
 
 
 
-if [ -d "/home/Core/mentees/$menteeName" ]; then
+
     
     echo "Enter your domain preferences (1-3) in preferred order (e.g., web sysad app):"
     read -r domain1 domain2 domain3
