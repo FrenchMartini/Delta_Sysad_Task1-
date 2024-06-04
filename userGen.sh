@@ -32,26 +32,26 @@ while IFS=' ' read -r mentorName mentorDomain _; do
 
     if [[ $mentorDomain = "sysad" ]]; then 
         sudo useradd -m -d "/home/Core/mentors/sysad/$mentorName" "$mentorName" >/dev/null
-        touch "/home/Core/mentors/sysad/$mentorName/allocatedMentees.txt"
-        mkdir -p "/home/Core/mentors/sysad/$mentorName/submittedTasks"
+        sudo touch "/home/Core/mentors/sysad/$mentorName/allocatedMentees.txt"
+        sudo mkdir -p "/home/Core/mentors/sysad/$mentorName/submittedTasks"
         for taskNumber in {1..3}; do 
-            mkdir -p "/home/Core/mentors/sysad/$mentorName/submittedTasks/task$taskNumber"
+           sudo  mkdir -p "/home/Core/mentors/sysad/$mentorName/submittedTasks/task$taskNumber"
         done
         
     elif [[ $mentorDomain = "web" ]]; then 
         sudo useradd -m -d "/home/Core/mentors/webdev/$mentorName" "$mentorName" >/dev/null
-        touch "/home/Core/mentors/webdev/$mentorName/allocatedMentees.txt"
-        mkdir -p "/home/Core/mentors/webdev/$mentorName/submittedTasks"
+        sudo touch "/home/Core/mentors/webdev/$mentorName/allocatedMentees.txt"
+        sudo mkdir -p "/home/Core/mentors/webdev/$mentorName/submittedTasks"
         for taskNumber in {1..3}; do 
-            mkdir -p "/home/Core/mentors/webdev/$mentorName/submittedTasks/task$taskNumber"
+            sudo mkdir -p "/home/Core/mentors/webdev/$mentorName/submittedTasks/task$taskNumber"
         done
        
     elif [[ $mentorDomain = "app" ]]; then
         sudo useradd -m -d "/home/Core/mentors/appdev/$mentorName" "$mentorName" >/dev/null
-        touch "/home/Core/mentors/appdev/$mentorName/allocatedMentees.txt"
-        mkdir -p "/home/Core/mentors/appdev/$mentorName/submittedTasks"
+        sudo touch "/home/Core/mentors/appdev/$mentorName/allocatedMentees.txt"
+        sudo mkdir -p "/home/Core/mentors/appdev/$mentorName/submittedTasks"
         for taskNumber in {1..3}; do 
-            mkdir -p "/home/Core/mentors/appdev/$mentorName/submittedTasks/Task$taskNumber"
+            sudo mkdir -p "/home/Core/mentors/appdev/$mentorName/submittedTasks/Task$taskNumber"
         done
         
     fi 
@@ -60,13 +60,13 @@ echo "Created accounts and home directories for mentors in their respective doma
 
 #Creating the required files for each mentee under their home directory
 awk '{print $1}' "$menteeFile" | tail -n +2 | while IFS= read -r menteeName; do
-    touch "/home/Core/mentees/$menteeName/domain_pref.txt"
-    touch "/home/Core/mentees/$menteeName/task_completed.txt"
-    touch "/home/Core/mentees/$menteeName/task_submitted.txt"
+    sudo touch "/home/Core/mentees/$menteeName/domain_pref.txt"
+    sudo touch "/home/Core/mentees/$menteeName/task_completed.txt"
+    sudo touch "/home/Core/mentees/$menteeName/task_submitted.txt"
 done 
 echo "Created required files for each mentee in their home directory"
 
-touch  "/home/Core/mentees_domain.txt"
+sudo touch  "/home/Core/mentees_domain.txt"
 
 #Setting permissions for core 
 sudo chown -R Core:core /home/Core
