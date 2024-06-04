@@ -11,9 +11,7 @@ awk '{print $1}' "menteeDetails.txt" | tail -n +2 | while IFS= read -r name; do
     fi 
 done 
 
-
-
-
+if [ -d "/home/Core/mentees/$user" ]; then
     
     echo "Enter your domain preferences (1-3) in preferred order (e.g., web sysad app):"
     read -r domain1 domain2 domain3
@@ -29,6 +27,5 @@ done
     [ -n "$domain1" ] && mkdir -p "/home/Core/mentees/$menteeName/$domain1"
     [ -n "$domain2" ] && mkdir -p "/home/Core/mentees/$menteeName/$domain2"
     [ -n "$domain3" ] && mkdir -p "/home/Core/mentees/$menteeName/$domain3"
-else
-    exit 0
+
 fi

@@ -72,7 +72,7 @@ echo "Created required files for each mentee in their home directory"
 sudo touch  "/home/Core/mentees_domain.txt"
 
 #Setting permissions for core 
-sudo chown -R Core:core /home/Core
+sudo chown -R Core:Core /home/Core
 sudo chmod 750 /home/Core
 sudo chmod 750 /home/Core/mentors
 sudo chmod 750 /home/Core/mentees
