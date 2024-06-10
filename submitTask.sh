@@ -1,7 +1,7 @@
 #!/bin/bash
 user=$(whoami)
 ############################MenteeScript#######################################
-awk '{print $1}' "/home/Desktop/Delta_Sysad/menteeDetails.txt" | tail -n +2 | while IFS= read -r name; do
+awk '{print $1}' "/home/adithya/Desktop/Delta_Sysad/menteeDetails.txt" | tail -n +2 | while IFS= read -r name; do
     if [[ "$user" == "$name" ]]; then 
         echo " Welcome mentee"
     else 
