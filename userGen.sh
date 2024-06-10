@@ -82,16 +82,15 @@ for domain in webdev appdev sysad; do
 done
 #setting permission for each mentor 
 while IFS=' ' read -r mentorName mentorDomain _; do
-    mentorHome="/home/Core/mentors/${mentorDomain,,}/$mentorName"
-    sudo chmod 750 "$mentorHome"
-    sudo chown "$mentorName":"$mentorName" "$mentorHome"
+    sudo chmod 750 "/home/Core/mentors/$mentorDomain/$mentorName"
+    sudo chown "$mentorName":"$mentorName" "/home/Core/mentors/$mentorDomain/$mentorName"
 done < "$mentorFile"
 
 #Setting permission for each mentee
 awk '{print $1}' "$menteeFile" | tail -n +2 | while IFS= read -r menteeName; do
     menteeHome="/home/Core/mentees/$menteeName"
-    sudo chmod 700 "$menteeHome"
-    sudo chown "$menteeName":"$menteeName" "$menteeHome"
+    sudo chmod 700 "/home/Core/mentees/$menteeName"
+    sudo chown "$menteeName":"$menteeName" "/home/Core/mentees/$menteeName"
 done
 # Allowing  Core to access everyone's home directory
 while IFS=' ' read -r mentorName mentorDomain _; do
