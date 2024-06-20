@@ -14,6 +14,9 @@ COPY [ ".", "/home/adithya/Desktop/Delta_Sysad" ]
 #Generating required users from the frist script 
 RUN /home/adithya/Desktop/Delta_Sysad/userGen.sh 
 
+#setting entrypoint path 
+ENTRYPOINT [ "/home/adithya/Desktop/Delta_Sysad" ]
+
 
 
 
