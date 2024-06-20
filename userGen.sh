@@ -5,6 +5,11 @@ sudo useradd -m -d /home/Core Core >/dev/null
 #Creating pasword for testing the script
 echo "Core:Core" | sudo chpasswd 
 echo "Core user account and home directory created"
+#Copying the required scripts in the cores home dir 
+sudo cp /home/adithya/Desktop/Delta_Sysad/mentorAllocation.sh /home/Core
+sudo cp /home/adithya/Desktop/Delta_Sysad/displayStatus.sh /home/Core
+
+
 #Creating mentor and mentee directories under /home/Core 
 sudo mkdir -p /home/Core/mentors 
 sudo mkdir -p /home/Core/mentees 
@@ -13,6 +18,9 @@ echo "Mentor and Mentee directories created under /home/Core"
 menteeFile=menteeDetails.txt
 awk '{print $1}' "$menteeFile" | tail -n +2 | while IFS= read -r menteeName; do
     sudo useradd -m -d "/home/Core/mentees/$menteeName" "$menteeName"  >/dev/null
+    sudo cp /home/adithya/Desktop/Delta_Sysad/domainPref.sh /home/Core/mentees/$menteeName
+    sudo cp /home/adithya/Desktop/Delta_Sysad/submitTask.sh /home/Core/mentees/$menteeName
+    sudo cp /home/adithya/Desktop/Delta_Sysad/deRegister.sh /home/Core/mentees/$menteeName
 done
 #Created the accounts and home directories for each mentee using useradd command using a whileloop 
 echo "Created accounts and home directories for each mentee"
