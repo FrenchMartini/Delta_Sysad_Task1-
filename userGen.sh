@@ -8,8 +8,6 @@ echo "Core user account and home directory created"
 #Copying the required scripts in the cores home dir 
 sudo cp /home/adithya/Desktop/Delta_Sysad/mentorAllocation.sh /home/Core
 sudo cp /home/adithya/Desktop/Delta_Sysad/displayStatus.sh /home/Core
-
-
 #Creating mentor and mentee directories under /home/Core 
 sudo mkdir -p /home/Core/mentors 
 sudo mkdir -p /home/Core/mentees 
